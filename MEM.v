@@ -10,8 +10,6 @@ module MEM(
     input [1:0] WDSel_in,
     input [31:0] WD_in,
 
-    // 冒险
-
     output [31:0] MEM_WB_Forward_Data,
 
     output RegWrite,

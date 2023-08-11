@@ -8,7 +8,6 @@
 `include "RF.v"
 
 module SCPU(
-    // 接 IP 核的信号
     input INT,
     input MIO_ready,
     output CPU_MIO,
@@ -16,32 +15,30 @@ module SCPU(
     input clk,
     input reset,
 
-    // 与 IM 接线
     input [31:0] inst_in,
     output [31:0] PC_out,
 
-    // 与 DM 接线 
     output mem_w,
     input [31:0] Data_in,
     output [31:0] Addr_out,
-    output [31:0] Data_out,                         // 写入内存的数据
-    output [2:0] dm_ctrl                            // 数据类型
+    output [31:0] Data_out,
+    output [2:0] dm_ctrl
 );
 
     wire [31:0] PC;
     wire [31:0] IF_ID_PC;
     wire [31:0] IF_ID_inst;
 
-    assign PC_out = PC;                             // 简化下变量名（
+    assign PC_out = PC;
 
     wire stall;
-    // 不带阻塞的版本
+
     //assign  stall = 1'b0;
 
     wire [31:0] MEM_NPC;
 
-    wire [31:0] EX_MEM_Forward_Data;                // EX/MEM 旁路的数据
-    wire [31:0] MEM_WB_Forward_Data;                // MEM/WB 旁路的数据
+    wire [31:0] EX_MEM_Forward_Data;
+    wire [31:0] MEM_WB_Forward_Data;
 
     PC U_PC(
         .clk(clk),
@@ -52,24 +49,20 @@ module SCPU(
         .PC(PC)
     );
 
-    // 不带冒险，将 flush 置为零
     // assign flush = 1'b0;
     wire flush;
 
     IF U_IF(
-        // 输入
         .clk(clk),
         .rst(reset),
         .stall(stall),
         .flush(flush),
         .PC_in(PC),
         .inst_in(inst_in),
-        // 输出
+
         .PC_out(IF_ID_PC),
         .inst_out(IF_ID_inst)
     );
-
-    // 寄存器模块
 
     wire [31:0] RD1;
     wire [31:0] RD2;
@@ -83,8 +76,6 @@ module SCPU(
         .PC(PC),
         .RFWr(MEM_WB_RegWrite), .A3(MEM_WB_rd), .WD(MEM_WB_WD)
     );
-
-    // ID 模块
 
     wire [31:0] ID_EX_ALU_A;
     wire [31:0] ID_EX_ALU_B;
@@ -101,7 +92,6 @@ module SCPU(
 
     
     ID U_ID(
-        // 输入
         .clk(clk),
         .rst(reset),
         .flush(flush),
@@ -109,7 +99,6 @@ module SCPU(
 
         .RD1(RD1), .RD2(RD2), .rs1(rs1), .rs2(rs2),    
 
-        // 下面是与数据冒险有关的变量
         .ID_EX_RegWrite(ID_EX_RegWrite),
         .ID_EX_rd(ID_EX_rd),
         .EX_MEM_RegWrite(EX_MEM_RegWrite),
@@ -118,23 +107,20 @@ module SCPU(
         .EX_MEM_Forward_Data(EX_MEM_Forward_Data),
         .MEM_WB_Forward_Data(MEM_WB_Forward_Data),
 
-        // 输出
         .stall(stall),                
         .ALU_A(ID_EX_ALU_A),             
         .ALU_B(ID_EX_ALU_B),
         .ALUOp(ID_EX_ALUOp),
         .PC(ID_EX_PC),
         .immout(ID_EX_immout),
-        .NPCOp(ID_EX_NPCOp),            // 控制下一条指令
-        .MemWrite(ID_EX_MemWrite),      // 是否写入内存
-        .dm_ctrl(ID_EX_dm_ctrl),        // 数据类型
+        .NPCOp(ID_EX_NPCOp),
+        .MemWrite(ID_EX_MemWrite),
+        .dm_ctrl(ID_EX_dm_ctrl),
         .DataWrite(ID_EX_DataWrite),
         .RegWrite(ID_EX_RegWrite),
-        .rd(ID_EX_rd),                  // 写入的寄存器编号
+        .rd(ID_EX_rd),
         .WDSel(ID_EX_WDSel)
     );
-
-    // EX 模块
 
     wire [31:0] EX_MEM_PC;
     wire [31:0] EX_MEM_immout;
@@ -150,7 +136,6 @@ module SCPU(
     wire [31:0] EX_MEM_WD;
 
     EX U_EX(
-        // 输入
         .clk(clk),
         .rst(reset),
         .ALU_A(ID_EX_ALU_A),
@@ -166,10 +151,8 @@ module SCPU(
         .rd_in(ID_EX_rd),
         .WDSel_in(ID_EX_WDSel),
 
-        // 旁路
         .EX_MEM_Forward_Data(EX_MEM_Forward_Data),
 
-        // 输出
         .PC(EX_MEM_PC),
         .flush(flush),
         .immout(EX_MEM_immout),
@@ -186,13 +169,11 @@ module SCPU(
     );
 
     NPC U_NPC(
-        // 输入
         .PC(EX_MEM_PC),
         .NPCOp(EX_MEM_NPCOp),
         .IMM(EX_MEM_immout),
         .aluout(EX_MEM_aluout),
 
-        // 输出
         .NPC(MEM_NPC)
     );
 
@@ -205,7 +186,6 @@ module SCPU(
         .clk(clk), 
         .rst(reset),
 
-        // 旁路
         .MEM_WB_Forward_Data(MEM_WB_Forward_Data),
 
         .raw_Data_in(Data_in),

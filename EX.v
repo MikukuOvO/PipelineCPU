@@ -13,20 +13,17 @@ module EX(
     input [31:0] immout_in,
     input [2:0] NPCOp_in,
 
-    input MemWrite_in,            // 内存写信号
+    input MemWrite_in,            
     input [2:0] dm_ctrl_in,         
-    input [31:0] raw_Data_out,   // 写往 DM 的数据
+    input [31:0] raw_Data_out,   
 
-    input RegWrite_in,            // 控制寄存器是否写
+    input RegWrite_in,            
     input [4:0] rd_in,
     input [1:0] WDSel_in,
 
     output reg flush,
 
-    // 冒险
     output [31:0] EX_MEM_Forward_Data,
-
-    // 给 MEM 阶段的信号
 
     output reg [31:0] PC,
     output reg [31:0] immout,
@@ -37,8 +34,6 @@ module EX(
     output reg [3:0] wea,
     output reg [31:0] dm_Data_out,
     output reg [31:0] aluout,
-
-    // 给 WB 阶段的信号
 
     output reg RegWrite,
     output reg [4:0] rd,
@@ -52,9 +47,6 @@ module EX(
     wire [31:0] aluout_w;
     wire [31:0] WD_w;
 
-
-    // 运算单元的接线
-
     alu U_alu(
         .A(ALU_A),
         .B(ALU_B),
@@ -63,8 +55,6 @@ module EX(
         .C(aluout_w),
         .Zero(Zero)
     );
-
-    // 考虑 Jalr 指令
 
     assign WD_w=(WDSel_in==`WDSel_FromPC)?PC_in+4:aluout_w;
     assign EX_MEM_Forward_Data=WD_w;
