@@ -1,38 +1,14 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2023/06/25 14:45:07
-// Design Name: 
-// Module Name: ctrl_encode_def
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-// NPC control signal
 `define NPC_PLUS4   3'b000
 `define NPC_BRANCH  3'b001
 `define NPC_JUMP    3'b010
 `define NPC_JALR 3'b100
 
-// ALU control signal
 `define ALU_NOP   3'b000 
 `define ALU_ADD   3'b001
 `define ALU_SUB   3'b010 
 `define ALU_AND   3'b011
 `define ALU_OR    3'b100
 
-//EXT CTRL itype, stype, btype, utype, jtype
 `define EXT_CTRL_ITYPE_SHAMT 6'b100000
 `define EXT_CTRL_ITYPE	6'b010000
 `define EXT_CTRL_STYPE	6'b001000

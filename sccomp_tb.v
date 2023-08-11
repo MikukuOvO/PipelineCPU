@@ -16,7 +16,7 @@ module sccomp_tb();
       $dumpfile("wave.vcd");
       $dumpvars(0, xgriscv.U_SCPU);
 
-      $readmemh( "T.dat" , xgriscv.U_imem.RAM); // load instructions into instruction memory
+      $readmemh( "Test_37_Instr.dat" , xgriscv.U_imem.RAM); // load instructions into instruction memory
       clk = 1;
       rstn = 1;
       #5 ;

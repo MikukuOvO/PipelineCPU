@@ -1,2 +1,3 @@
 # PipelineCPU
-A pipelined CPU implemented by Verilog
+A pipelined CPU implemented by Verilog.
+

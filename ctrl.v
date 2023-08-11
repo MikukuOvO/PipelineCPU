@@ -1,53 +1,31 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2023/06/25 15:02:32
-// Design Name: 
-// Module Name: ctrl
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
-module ctrl(Op, Funct7, Funct3,
-            RegWrite, MemWrite,
-            EXTOp, ALUOp, NPCOp, 
-            ALUSrc, GPRSel, WDSel, dm_ctrl,
-            use_rs1, use_rs2
-            );
+module ctrl(
+  Op, Funct7, Funct3, 
+  RegWrite, MemWrite, EXTOp, ALUOp, NPCOp, 
+  ALUSrc, GPRSel, WDSel, dm_ctrl,
+  use_rs1, use_rs2
+);
             
-    input  [6:0] Op;       // opcode
-    input  [6:0] Funct7;    // funct7
-    input  [2:0] Funct3;    // funct3
+    input [6:0] Op; // Opcode
+    input [6:0] Funct7; // Funct7
+    input [2:0] Funct3; // Funct3
     
-    output       RegWrite; // control signal for register write
-    output       MemWrite; // control signal for memory write
-    output [5:0] EXTOp;    // control signal to signed extension
-    output [4:0] ALUOp;    // ALU opertion
-    output [2:0] NPCOp;    // next pc operation
-    output       ALUSrc;   // ALU source for A
+    output RegWrite; // Control signal for register write
+    output MemWrite; // Control signal for memory write
+    output [5:0] EXTOp; // Control signal to signed extension
+    output [4:0] ALUOp; // ALU opertion
+    output [2:0] NPCOp; // Next PC operation
+    output ALUSrc; // ALU source for A
     output [2:0] dm_ctrl;
-    output [1:0] GPRSel;   // general purpose register selection
-    output [1:0] WDSel;    // (register) write data selection
-    output  use_rs1, use_rs2;
+    output [1:0] GPRSel; // General purpose register selection
+    output [1:0] WDSel; // Write data selection
+    output use_rs1, use_rs2;
    
   // r format
-    wire rtype  = ~Op[6]&Op[5]&Op[4]&~Op[3]&~Op[2]&Op[1]&Op[0]; //0110011
-    wire i_add  = rtype& ~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&~Funct3[1]&~Funct3[0]; // add 0000000 000
-    wire i_sub  = rtype& ~Funct7[6]& Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&~Funct3[1]&~Funct3[0]; // sub 0100000 000
-    wire i_or   = rtype& ~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]& Funct3[2]& Funct3[1]&~Funct3[0]; // or 0000000 110
-    wire i_and  = rtype& ~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]& Funct3[2]& Funct3[1]& Funct3[0]; // and 0000000 111
+    wire rtype  = ~Op[6] & Op[5] & Op[4] & ~Op[3] & ~Op[2] & Op[1] & Op[0]; //0110011
+    wire i_add  = rtype & ~Funct7[6] &~Funct7[5] &~Funct7[4] &~Funct7[3] &~Funct7[2] &~Funct7[1] &~Funct7[0] &~Funct3[2]&~Funct3[1]&~Funct3[0]; // add 0000000 000
+    wire i_sub  = rtype & ~Funct7[6] & Funct7[5] &~Funct7[4] &~Funct7[3] &~Funct7[2] &~Funct7[1] &~Funct7[0] &~Funct3[2]&~Funct3[1]&~Funct3[0]; // sub 0100000 000
+    wire i_or   = rtype & ~Funct7[6] &~Funct7[5] &~Funct7[4] &~Funct7[3] &~Funct7[2] &~Funct7[1] &~Funct7[0] & Funct3[2]& Funct3[1]&~Funct3[0]; // or 0000000 110
+    wire i_and  = rtype & ~Funct7[6] &~Funct7[5] &~Funct7[4] &~Funct7[3] &~Funct7[2] &~Funct7[1] &~Funct7[0] & Funct3[2]& Funct3[1]& Funct3[0]; // and 0000000 111
     wire i_xor  = rtype & ~Funct7[6] & ~Funct7[5] & ~Funct7[4] & ~Funct7[3] & ~Funct7[2] & ~Funct7[1] & ~Funct7[0] & Funct3[2] & ~Funct3[1] & ~Funct3[0]; // xor 0000000 100
     wire i_sll  = rtype & ~Funct7[6] & ~Funct7[5] & ~Funct7[4] & ~Funct7[3] & ~Funct7[2] & ~Funct7[1] & ~Funct7[0] & ~Funct3[2] & ~Funct3[1] & Funct3[0]; // sll 0000000 001
     wire i_slt  = rtype & ~Funct7[6] & ~Funct7[5] & ~Funct7[4] & ~Funct7[3] & ~Funct7[2] & ~Funct7[1] & ~Funct7[0] & ~Funct3[2] & Funct3[1] & ~Funct3[0]; // slt 0000000 010
