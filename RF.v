@@ -1,4 +1,6 @@
-
+/*
+    This module implements the Register File unit
+*/
 module RF(   
     input         clk, 
     input         rst,

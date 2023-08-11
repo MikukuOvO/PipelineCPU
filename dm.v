@@ -1,5 +1,5 @@
 /*
-    This module implements the data memory unit
+    This module implements the Data Memory unit
 */
 module dm(clk, DMWr, addr, pc, din, dm_ctrl, dout);
    input clk;

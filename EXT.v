@@ -1,3 +1,6 @@
+/*
+    This module implements the immediate number of expansion unit
+*/
 `include "ctrl_encode_def.v"
 module EXT( 
 

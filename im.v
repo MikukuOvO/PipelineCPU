@@ -1,5 +1,5 @@
 /*
-    This module implements the data memory unit
+    This module implements the Instruction Memory unit
 */
 module im(
     input [31:0] addr,
