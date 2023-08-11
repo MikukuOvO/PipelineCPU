@@ -1,8 +1,11 @@
+/*
+    This module implements the data memory unit
+*/
+module im(
+    input [31:0] addr,
+    output [31:0] dout 
+);
 
-// instruction memory
-module im(input  [31:0]  addr,
-            output [31:0] dout );
-
-  reg  [31:0] RAM[511:0];
-  assign dout = RAM[addr[11:2]]; // word aligned
+  reg [31:0] RAM[511:0];
+  assign dout = RAM[addr[11:2]]; // For word alignment
 endmodule  
