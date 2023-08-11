@@ -1,5 +1,7 @@
+/*
+   This module implements an arithmetic logic unit
+*/
 `include "ctrl_encode_def.v"
-
 module alu(A, B, ALUOp, C, Zero, PC);
    input signed [31:0] A, B;
    input [4:0] ALUOp;
