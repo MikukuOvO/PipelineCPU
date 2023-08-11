@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In this project, we implemented a pipeline CPU based on Verilog language, which can correctly execute our test file `Test_37_Instr` (including data adventure, structure adventure, control adventure, and $$37$$ basic instructions). We can correctly execute instructions on the development board `Nexys A7` after generating a bit stream through `Vivado`.
+In this project, we implemented a pipeline CPU based on Verilog language, which can correctly execute our test file `Test_37_Instr` (including data adventure, structure adventure, control adventure, and `37` basic instructions). We can correctly execute instructions on the development board `Nexys A7` after generating a bit stream through `Vivado`.
 
 ## Design reference
 
